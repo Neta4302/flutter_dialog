@@ -28,21 +28,21 @@ class _SignUpPageState extends State<SignUpPage> {
         password: passwordController.text
       );
 
-      _showMyDialog('Create successfully.');
+      _showMyDialog1('Create successfully.');
 
     } on FirebaseAuthException catch (e) {
       print('Failed with error code: ${e.code}');
       print(e.message);
 
       if (e.code == 'weak-password') {
-        print('The password is too weak.');
+        _showMyDialog1('The password is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('There is already a user in the firebase.');
+        _showMyDialog2('There is already a user in the firebase.');
       }
     }
   }
 
-  void _showMyDialog(String txtMsg) async {
+  void _showMyDialog1(String txtMsg) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -58,6 +58,33 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showMyDialog2(String txtMsg) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            backgroundColor: Colors.amberAccent,
+            title: const Text('AlertDialog Title'),
+            content: Text(txtMsg),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop('login');
+                },
                 child: const Text('OK'),
               ),
             ],
